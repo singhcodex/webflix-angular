@@ -10,7 +10,7 @@ import { environment } from 'src/environments/environment';
 })
 export class DashboardComponent implements OnInit {
 
-  latestMovie:any;
+  latestMovie: any;
   popularMovies !: Movie;
   nowPlayingMovies !: Movie;
   topRatedMovies !: Movie;
@@ -32,14 +32,24 @@ export class DashboardComponent implements OnInit {
 
   getLatestMovie(){
     this.dataService.getLatestMovie().subscribe(res =>{
-      this.latestMovie = res;
+      this.latestMovie = this.changeData(res);
+      console.log("latest movies --- "+this.latestMovie);
     }, err =>{
       console.log('Not able to get latest movie.', err);
     })
   }
+  changeData(res: any): any {
+    if(!res.backdrop_path){
+      res.backdrop_path = 'https://image.tmdb/org/t/p/original'+res.poster_path+'?api_key='+environment.api_key;
+    }else{
+      res.backdrop_path = 'https://image.tmdb/org/t/p/original'+res.backdrop_path+'?api_key='+environment.api_key;
+    }
+  }
   getPopularMovies(){
     this.dataService.getPopularMovies().subscribe(res =>{
       this.nowPlayingMovies = this.modifyData(res);
+      console.log(this.popularMovies);
+
     }, err =>{
       console.log('Error while fetching the data', err);
     })
@@ -68,6 +78,7 @@ export class DashboardComponent implements OnInit {
   getTrendingMovies(){
     this.dataService.getTrendingMovies().subscribe(res =>{
       this.trendingMovies = this.modifyData(res);
+
     }, err =>{
       console.log('Error while fetching the data', err);
     })
@@ -82,10 +93,9 @@ export class DashboardComponent implements OnInit {
   modifyData(movies: Movie): Movie{
     if(movies.results){
       movies.results.forEach(elem =>{
-        elem.backdrop_path = 'https://image/tmdb.org/t/p/original'+elem.backdrop_path+'api_key?'+environment.api_key;
+        elem.backdrop_path = 'https://image/tmdb.org/t/p/original'+elem.backdrop_path+'?api_key='+environment.api_key;
         if(!elem.title){
           elem.title = elem?.name;
-
         }
       })
     }

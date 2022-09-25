@@ -27,7 +27,7 @@ export class DataService {
     return this.http.get<Movie>(this.url+'/movie/top_rated?api_key='+environment.api_key);
   }
   getTrendingMovies(): Observable<Movie>{
-    return this.http.get<Movie>(this.url+'/movie/trending/all/week?api_key='+environment.api_key);
+    return this.http.get<Movie>(this.url+'/trending/all/week?api_key='+environment.api_key);
   }
   getUpcomingMovies(): Observable<Movie>{
     return this.http.get<Movie>(this.url+'/movie/upcoming?api_key='+environment.api_key);
